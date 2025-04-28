@@ -16,18 +16,23 @@ export class CommentsController {
     constructor(private readonly commentsService: CommentsService) {}
 
     @Post()
-    create(@Body() createCommentDto: CreateCommentDto) {
-        return this.commentsService.create(createCommentDto);
-    }
+    async create(@Body() createCommentDto: CreateCommentDto) {
+        const comment = await this.commentsService.create(createCommentDto);
 
-    @Get()
-    findAll() {
-        return this.commentsService.findAll();
+        return {
+            sucess: true,
+            data: comment,
+        };
     }
 
     @Get(':id')
-    findOne(@Param('id') id: string) {
-        return this.commentsService.findOne(+id);
+    async findComment(@Param('id') id: string) {
+        const comment = await this.commentsService.findComment(+id);
+
+        return {
+            success: true,
+            data: comment,
+        };
     }
 
     @Patch(':id')
