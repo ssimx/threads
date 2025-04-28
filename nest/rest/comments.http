@@ -1,0 +1,21 @@
+GET http://localhost:3000/comments HTTP/1.1
+
+### 
+
+POST http://localhost:3000/comments HTTP/1.1
+content-type: application/json
+
+{
+    "content": "reply",
+    "authorId": 6,
+    "replyToId": 1
+}
+
+### 
+
+GET http://localhost:3000/comments/1 HTTP/1.1
+
+### 
+
+GET http://localhost:3000/comments/1?replies=true HTTP/1.1
+

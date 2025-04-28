@@ -1,6 +1,7 @@
-import { IsNumber, IsString, IsOptional } from 'class-validator';
+import { IsNumber, IsString, IsOptional, IsNotEmpty } from 'class-validator';
 
 export class CreateCommentDto {
+    @IsNotEmpty()
     @IsString()
     content: string;
 
@@ -9,5 +10,5 @@ export class CreateCommentDto {
 
     @IsOptional()
     @IsNumber()
-    replyToId: number;
+    replyToId: number | null;
 }

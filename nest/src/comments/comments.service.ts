@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { CreateCommentDto } from './dto/create-comment.dto';
-import { UpdateCommentDto } from './dto/update-comment.dto';
 import { Comment } from '@prisma/client';
 import { PrismaService } from 'src/prisma.service';
 
@@ -15,12 +14,31 @@ export class CommentsService {
                 authorId: createCommentDto.authorId,
                 replyToId: createCommentDto.replyToId,
             },
+            include: {
+                author: {
+                    select: {
+                        name: true,
+                    },
+                },
+                replyTo: true,
+            },
         });
 
         return newComment;
     }
 
-    async findComment(id: number): Promise<Comment | null> {
+    async getAllComments(): Promise<Comment[] | null> {
+        const comments = await this.prisma.comment.findMany({
+            where: {
+                replyToId: null,
+            },
+            take: 20,
+        });
+
+        return comments;
+    }
+
+    async getComment(id: number): Promise<Comment | null> {
         const comment = await this.prisma.comment.findUnique({
             where: {
                 id,
@@ -30,11 +48,13 @@ export class CommentsService {
         return comment;
     }
 
-    update(id: number, updateCommentDto: UpdateCommentDto) {
-        return `This action updates a #${id} comment`;
-    }
+    async getCommentReplies(id: number): Promise<Comment[] | null> {
+        const replies = await this.prisma.comment.findMany({
+            where: {
+                replyToId: id,
+            },
+        });
 
-    remove(id: number) {
-        return `This action removes a #${id} comment`;
+        return replies;
     }
 }

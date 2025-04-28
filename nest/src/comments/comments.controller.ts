@@ -1,15 +1,6 @@
-import {
-    Controller,
-    Get,
-    Post,
-    Body,
-    Patch,
-    Param,
-    Delete,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Query } from '@nestjs/common';
 import { CommentsService } from './comments.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
-import { UpdateCommentDto } from './dto/update-comment.dto';
 
 @Controller('comments')
 export class CommentsController {
@@ -25,26 +16,35 @@ export class CommentsController {
         };
     }
 
+    @Get('')
+    async getAllComments() {
+        const comments = await this.commentsService.getAllComments();
+
+        return {
+            success: true,
+            data: comments,
+        };
+    }
+
     @Get(':id')
-    async findComment(@Param('id') id: string) {
-        const comment = await this.commentsService.findComment(+id);
+    async getComment(
+        @Param('id') id: string,
+        @Query() queryParams: { replies: 'true' },
+    ) {
+        if (queryParams.replies === 'true') {
+            const replies = await this.commentsService.getCommentReplies(+id);
+
+            return {
+                success: true,
+                data: replies,
+            };
+        }
+
+        const comment = await this.commentsService.getComment(+id);
 
         return {
             success: true,
             data: comment,
         };
-    }
-
-    @Patch(':id')
-    update(
-        @Param('id') id: string,
-        @Body() updateCommentDto: UpdateCommentDto,
-    ) {
-        return this.commentsService.update(+id, updateCommentDto);
-    }
-
-    @Delete(':id')
-    remove(@Param('id') id: string) {
-        return this.commentsService.remove(+id);
     }
 }
