@@ -1,7 +1,7 @@
-import { IsNumber, IsNumberString, IsOptional } from 'class-validator';
+import { IsNumber, IsString, IsOptional } from 'class-validator';
 
 export class CreateCommentDto {
-    @IsNumberString()
+    @IsString()
     content: string;
 
     @IsNumber()

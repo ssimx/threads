@@ -1,11 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
-import { Comment, PrismaClient } from '@prisma/client';
+import { Comment } from '@prisma/client';
+import { PrismaService } from 'src/prisma.service';
 
 @Injectable()
 export class CommentsService {
-    constructor(private prisma: PrismaClient) {}
+    constructor(private prisma: PrismaService) {}
 
     async create(createCommentDto: CreateCommentDto): Promise<Comment> {
         const newComment = await this.prisma.comment.create({
