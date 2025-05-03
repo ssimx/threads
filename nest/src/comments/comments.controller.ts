@@ -9,21 +9,13 @@ export class CommentsController {
     @Post()
     async create(@Body() createCommentDto: CreateCommentDto) {
         const comment = await this.commentsService.create(createCommentDto);
-
-        return {
-            sucess: true,
-            data: comment,
-        };
+        return comment;
     }
 
     @Get('')
     async getAllComments() {
         const comments = await this.commentsService.getAllComments();
-
-        return {
-            success: true,
-            data: comments,
-        };
+        return comments;
     }
 
     @Get(':id')
@@ -33,18 +25,10 @@ export class CommentsController {
     ) {
         if (queryParams.replies === 'true') {
             const replies = await this.commentsService.getCommentReplies(+id);
-
-            return {
-                success: true,
-                data: replies,
-            };
+            return replies;
         }
 
         const comment = await this.commentsService.getComment(+id);
-
-        return {
-            success: true,
-            data: comment,
-        };
+        return comment;
     }
 }

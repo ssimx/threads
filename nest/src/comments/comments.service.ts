@@ -15,11 +15,7 @@ export class CommentsService {
                 replyToId: createCommentDto.replyToId,
             },
             include: {
-                author: {
-                    select: {
-                        name: true,
-                    },
-                },
+                author: true,
                 replyTo: true,
             },
         });
@@ -33,6 +29,13 @@ export class CommentsService {
                 replyToId: null,
             },
             take: 20,
+            orderBy: {
+                createdAt: 'desc',
+            },
+            include: {
+                author: true,
+                replyTo: true,
+            },
         });
 
         return comments;
@@ -43,6 +46,10 @@ export class CommentsService {
             where: {
                 id,
             },
+            include: {
+                author: true,
+                replyTo: true,
+            },
         });
 
         return comment;
@@ -52,6 +59,14 @@ export class CommentsService {
         const replies = await this.prisma.comment.findMany({
             where: {
                 replyToId: id,
+            },
+            take: 20,
+            orderBy: {
+                createdAt: 'desc',
+            },
+            include: {
+                author: true,
+                replyTo: true,
             },
         });
 

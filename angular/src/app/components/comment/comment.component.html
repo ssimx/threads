@@ -1,0 +1,50 @@
+<div class="min-w-[500px] block rounded-md border border-gray-300 p-4 shadow-lg sm:p-6">
+    <div class="sm:flex sm:justify-between sm:gap-4 lg:gap-6">
+        <div class="mt-4 sm:mt-0">
+
+            <div class="flex gap-2 items-center">
+                <p class="text-sm text-gray-700">
+                    {{comment.author.name}}
+                </p>
+                <p>·</p>
+                <p class="text-sm text-gray-700">
+                    {{comment.createdAt}}
+                </p>
+            </div>
+
+            <p class="mt-4 line-clamp-2 text-sm text-pretty text-gray-700">
+                {{comment.content}}
+            </p>
+
+        </div>
+    </div>
+
+    <div class="mt-6 flex gap-4 justify-end lg:gap-6">
+        <div
+            class="group inline-block rounded-sm bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 p-[2px] hover:text-white focus:ring-3 focus:outline-hidden">
+            <button (click)="toggleReplying()"
+                class="block rounded-xs bg-white px-4 py-1 text-sm font-medium group-hover:bg-transparent hover:cursor-pointer">
+                Reply
+            </button>
+        </div>
+
+        <button (click)="toggleExpanded()" class="duration-200" [class.rotate-180]="isExpanded()">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="size-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+            </svg>
+        </button>
+    </div>
+
+    <div class="mt-2 mb-4" *ngIf="isReplying()">
+        <app-comment-form placeholder="Write your reply" buttonText="Send" (submittedForm)="createReply($event)"></app-comment-form>
+    </div>
+
+    <div class="nested-comments" *ngIf="isExpanded()">
+        <p class="text-[1.1rem] font-bold mb-2">Replies</p>
+        <div class="w-full px-4 flex flex-col gap-4">
+            <p *ngIf="nestedComments().length === 0">No replies</p>
+            <app-comment [comment]="reply" *ngFor="let reply of nestedComments(); trackBy: commentTrackById"></app-comment>
+        </div>
+    </div>
+</div>

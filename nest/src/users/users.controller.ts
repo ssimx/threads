@@ -9,20 +9,12 @@ export class UsersController {
     @Post()
     async create(@Body() createUserDto: CreateUserDto) {
         const user = await this.usersService.create(createUserDto);
-
-        return {
-            sucess: true,
-            data: user,
-        };
+        return user;
     }
 
     @Get(':id')
     async findOne(@Param('id') id: string) {
         const user = await this.usersService.findUser(+id);
-
-        return {
-            sucess: true,
-            data: user,
-        };
+        return user;
     }
 }
